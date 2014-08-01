@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<script src='vendor/three.js/build/three.js'></script>
+<script src="vendor/require.js/require.js"></script>
+<script src="vendor/three.js/examples/js/Detector.js"></script>
+<script src="vendor/threex.windowresize.js"></script>
+<body style='margin: 0px; background-color: #bbbbbb; overflow: hidden;'><script>
+require([], function(){
+	// detect WebGL
+	if( !Detector.webgl ){
+		Detector.addGetWebGLMessage();
+		throw 'WebGL Not Available'
+	}
+
+
+	var width = window.innerWidth,
+			height = window.innerHeight;
+	//camera attributes
+	var view_angle = 45,
+			aspect = width/height,
+			near = 0.1,
+			far = 10000;
+	// setup webgl renderer full page
+	var renderer	= new THREE.WebGLRenderer();
+
+	// setup a scene and camera
+	var camera	= new THREE.PerspectiveCamera(
+								view_angle,
+								aspect,
+								near,
+								far);
+
+	var scene	= new THREE.Scene();
+	scene.add(camera);
+	camera.position.z = 300;
+
+	renderer.setSize( width, height );
+	document.body.appendChild( renderer.domElement );
+
+	var winResize	= new THREEx.WindowResize(renderer, camera);
+
+// create the sphere's material
+	var sphereMaterial = new THREE.MeshLambertMaterial(
+	{
+	    color: 0xdddddd,
+	    wireframe:true
+	});
+
+	// set up the sphere vars
+	var radius = 50, segments = 30, rings = 60;
+
+	// create a new mesh with sphere geometry -
+	// we will cover the sphereMaterial next!
+	var sphere = new THREE.Mesh(
+	   new THREE.SphereGeometry(radius, segments, rings),
+	   sphereMaterial);
+
+	// add the sphere to the scene
+	scene.add(sphere);
+
+	// and the camera
+	scene.add(camera);
+
+	// create a point light
+	var pointLight = new THREE.PointLight( 0xFFFFFF );
+
+	// set its position
+	pointLight.position.x = 10;
+	pointLight.position.y = 50;
+	pointLight.position.z = 130;
+
+	// add to the scene
+	scene.add(pointLight);
+
+	renderer.render(scene,camera);
+
+});
+</script></body>
